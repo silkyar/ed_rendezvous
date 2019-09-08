@@ -24,7 +24,6 @@ from py_etherpadlite import forms
 from py_etherpadlite import config
 
 
-@login_required(login_url='/etherpad')
 def padCreate(request, pk):
     """Create a named pad for the given group
     """
