@@ -22,7 +22,7 @@ class PadServer(models.Model):
     class Meta:
         verbose_name = _('server')
 
-    def __unicode__(self):
+    def __str__(self):
         return self.url
 
     @property
@@ -43,12 +43,12 @@ class PadGroup(models.Model):
     class Meta:
         verbose_name = _('group')
 
-    def __unicode__(self):
-        return self.group.__unicode__()
+    def __str__(self):
+        return self.group.__str__()
 
     @property
     def epclient(self):
-        return EtherpadLiteClient(self.server.apikey, self.server.apiurl)
+        return EtherpadLiteClient({'apikey':self.server.apikey}, self.server.apiurl)
 
     def _get_random_id(self, size=6,
         chars=string.ascii_uppercase + string.digits + string.ascii_lowercase):
@@ -58,7 +58,7 @@ class PadGroup(models.Model):
 
     def EtherMap(self):
         result = self.epclient.createGroupIfNotExistsFor(
-            self.group.__unicode__() + self._get_random_id() +
+            self.group.__str__() + self._get_random_id() +
             self.group.id.__str__()
         )
         self.groupID = result['groupID']
@@ -112,14 +112,14 @@ class PadAuthor(models.Model):
     class Meta:
         verbose_name = _('author')
 
-    def __unicode__(self):
-        return self.user.__unicode__()
+    def __str__(self):
+        return self.user.__str__()
 
     def EtherMap(self):
-        epclient = EtherpadLiteClient(self.server.apikey, self.server.apiurl)
+        epclient = EtherpadLiteClient({'apikey':self.server.apikey}, self.server.apiurl)
         result = epclient.createAuthorIfNotExistsFor(
             self.user.id.__str__(),
-            name=self.__unicode__()
+            name=self.__str__()
         )
         self.authorID = result['authorID']
         return result
@@ -146,7 +146,7 @@ class Pad(models.Model):
     server = models.ForeignKey(PadServer, on_delete=models.PROTECT)
     group = models.ForeignKey(PadGroup, on_delete=models.PROTECT)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     @property
@@ -155,7 +155,7 @@ class Pad(models.Model):
 
     @property
     def epclient(self):
-        return EtherpadLiteClient(self.server.apikey, self.server.apiurl)
+        return EtherpadLiteClient({'apikey':self.server.apikey}, self.server.apiurl)
 
     def Create(self):
         return self.epclient.createGroupPad(self.group.groupID, self.name)

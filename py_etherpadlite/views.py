@@ -45,7 +45,7 @@ def padCreate(request, pk):
     con = {
         'form': form,
         'pk': pk,
-        'title': _('Create pad in %(grp)s') % {'grp': group.__unicode__()}
+        'title': _('Create pad in %(grp)s') % {'grp': group.__str__()}
     }
     con.update(csrf(request))
     return render_to_response(
@@ -70,7 +70,7 @@ def padDelete(request, pk):
     con = {
         'action': '/etherpad/delete/' + pk + '/',
         'question': _('Really delete this pad?'),
-        'title': _('Deleting %(pad)s') % {'pad': pad.__unicode__()}
+        'title': _('Deleting %(pad)s') % {'pad': pad.__str__()}
     }
     con.update(csrf(request))
     return render_to_response(
@@ -124,7 +124,7 @@ def groupDelete(request, pk):
 def profile(request):
     """Display a user profile containing etherpad groups and associated pads
     """
-    name = request.user.__unicode__()
+    name = request.user.__str__()
 
     try:  # Retrieve the corresponding padauthor object
         author = PadAuthor.objects.get(user=request.user)
@@ -138,7 +138,7 @@ def profile(request):
 
     groups = {}
     for g in author.group.all():
-        groups[g.__unicode__()] = {
+        groups[g.__str__()] = {
             'group': g,
             'pads': Pad.objects.filter(group=g)
         }
@@ -173,7 +173,7 @@ def pad(request, pk):
                 'pad': pad,
                 'link': padLink,
                 'server': server,
-                'uname': author.user.__unicode__(),
+                'uname': author.user.__str__(),
                 'error': _('You are not allowed to view or edit this pad')
             },
             context_instance=RequestContext(request)
@@ -199,7 +199,7 @@ def pad(request, pk):
                 'pad': pad,
                 'link': padLink,
                 'server': server,
-                'uname': author.user.__unicode__(),
+                'uname': author.user.__str__(),
                 'error': _('etherpad-lite session request returned:') +
                 ' "' + e.reason + '"'
             },
@@ -214,7 +214,7 @@ def pad(request, pk):
             'pad': pad,
             'link': padLink,
             'server': server,
-            'uname': author.user.__unicode__(),
+            'uname': author.user.__str__(),
             'error': False
         },
         context_instance=RequestContext(request)
