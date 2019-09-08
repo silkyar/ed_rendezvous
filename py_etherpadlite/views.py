@@ -55,7 +55,7 @@ def padCreate(request, pk):
     )
 
 
-@login_required(login_url='/etherpad')
+# @login_required(login_url='/etherpad')
 def padDelete(request, pk):
     """Delete a given pad
     """
@@ -80,7 +80,7 @@ def padDelete(request, pk):
     )
 
 
-@login_required(login_url='/etherpad')
+# @login_required(login_url='/etherpad')
 def groupCreate(request):
     """ Create a new Group
     """
@@ -113,14 +113,14 @@ def groupCreate(request):
     )
 
 
-@login_required(login_url='/etherpad')
+# @login_required(login_url='/etherpad')
 def groupDelete(request, pk):
     """
     """
     pass
 
 
-@login_required(login_url='/etherpad')
+# @login_required(login_url='/etherpad')
 def profile(request):
     """Display a user profile containing etherpad groups and associated pads
     """
@@ -154,7 +154,7 @@ def profile(request):
     )
 
 
-@login_required(login_url='/etherpad')
+# @login_required(login_url='/etherpad')
 def pad(request, pk):
     """Create and session and display an embedded pad
     """

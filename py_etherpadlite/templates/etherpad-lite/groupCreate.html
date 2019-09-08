@@ -6,7 +6,7 @@
 {% block content %}
   <h1>{{title}}</h1>
   {{message}}
-  <form action="/group/create/" method="post">
+  <form action="/py_etherpadlite/group/create/" method="post">
     {% csrf_token %}
     <table>
       <tr>
