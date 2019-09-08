@@ -58,9 +58,10 @@ class PadGroup(models.Model):
 
     def EtherMap(self):
         result = self.epclient.createGroupIfNotExistsFor(
-            self.group.__str__() + self._get_random_id() +
-            self.group.id.__str__()
-        )
+			groupMapper =
+				self.group.__str__() +
+				self._get_random_id() +
+				self.group.id.__str__())
         self.groupID = result['groupID']
         return result
 
@@ -116,10 +117,11 @@ class PadAuthor(models.Model):
         return self.user.__str__()
 
     def EtherMap(self):
-        epclient = EtherpadLiteClient({'apikey':self.server.apikey}, self.server.apiurl)
+        epclient = EtherpadLiteClient(
+			{'apikey':self.server.apikey}, self.server.apiurl)
         result = epclient.createAuthorIfNotExistsFor(
-            self.user.id.__str__(),
-            name=self.__str__()
+			authorMapper=self.user.id.__str__(),
+			name=self.__str__()
         )
         self.authorID = result['authorID']
         return result
@@ -155,7 +157,8 @@ class Pad(models.Model):
 
     @property
     def epclient(self):
-        return EtherpadLiteClient({'apikey':self.server.apikey}, self.server.apiurl)
+        return EtherpadLiteClient(
+			{'apikey':self.server.apikey}, self.server.apiurl)
 
     def Create(self):
         return self.epclient.createGroupPad(self.group.groupID, self.name)

@@ -7,7 +7,7 @@ import urllib
 from urllib.parse import urlparse
 
 # Framework imports
-from django.shortcuts import render, render_to_response, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 
 from django.http import HttpResponseRedirect
 from django.template import RequestContext
@@ -48,10 +48,10 @@ def padCreate(request, pk):
         'title': _('Create pad in %(grp)s') % {'grp': group.__str__()}
     }
     con.update(csrf(request))
-    return render_to_response(
+    return render(
+        request,
         'etherpad-lite/padCreate.html',
-        con,
-        context_instance=RequestContext(request)
+        con
     )
 
 
@@ -73,10 +73,10 @@ def padDelete(request, pk):
         'title': _('Deleting %(pad)s') % {'pad': pad.__str__()}
     }
     con.update(csrf(request))
-    return render_to_response(
+    return render(
+        request,
         'etherpad-lite/confirm.html',
-        con,
-        context_instance=RequestContext(request)
+        con
     )
 
 
@@ -109,7 +109,7 @@ def groupCreate(request):
     return render(
 		request,
         'etherpad-lite/groupCreate.html',
-        con,
+        con
     )
 
 
@@ -143,14 +143,14 @@ def profile(request):
             'pads': Pad.objects.filter(group=g)
         }
 
-    return render_to_response(
+    return render(
+        request,
         'etherpad-lite/profile.html',
         {
             'name': name,
             'author': author,
             'groups': groups
-        },
-        context_instance=RequestContext(request)
+        }
     )
 
 
@@ -167,7 +167,8 @@ def pad(request, pk):
     author = PadAuthor.objects.get(user=request.user)
 
     if author not in pad.group.authors.all():
-        response = render_to_response(
+        response = render(
+            request,
             'etherpad-lite/pad.html',
             {
                 'pad': pad,
@@ -175,8 +176,7 @@ def pad(request, pk):
                 'server': server,
                 'uname': author.user.__str__(),
                 'error': _('You are not allowed to view or edit this pad')
-            },
-            context_instance=RequestContext(request)
+            }
         )
         return response
 
@@ -193,7 +193,8 @@ def pad(request, pk):
             time.mktime(expires.timetuple()).__str__()
         )
     except Exception as e:
-        response = render_to_response(
+        response = render(
+            request,
             'etherpad-lite/pad.html',
             {
                 'pad': pad,
@@ -202,13 +203,13 @@ def pad(request, pk):
                 'uname': author.user.__str__(),
                 'error': _('etherpad-lite session request returned:') +
                 ' "' + e.reason + '"'
-            },
-            context_instance=RequestContext(request)
+            }
         )
         return response
 
     # Set up the response
-    response = render_to_response(
+    response = render(
+        request,
         'etherpad-lite/pad.html',
         {
             'pad': pad,
@@ -216,8 +217,7 @@ def pad(request, pk):
             'server': server,
             'uname': author.user.__str__(),
             'error': False
-        },
-        context_instance=RequestContext(request)
+        }
     )
 
     # Delete the existing session first
