@@ -7,7 +7,7 @@ import urllib
 from urllib.parse import urlparse
 
 # Framework imports
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render, render_to_response, get_object_or_404
 
 from django.http import HttpResponseRedirect
 from django.template import RequestContext
@@ -106,10 +106,10 @@ def groupCreate(request):
         'message': message,
     }
     con.update(csrf(request))
-    return render_to_response(
+    return render(
+		request,
         'etherpad-lite/groupCreate.html',
         con,
-        context_instance=RequestContext(request)
     )
 
 
