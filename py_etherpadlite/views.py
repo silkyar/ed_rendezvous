@@ -222,7 +222,7 @@ def pad(request, pk):
 
     # Delete the existing session first
     if ('padSessionID' in request.COOKIES):
-        epclient.deleteSession(request.COOKIES['sessionID'])
+        epclient.deleteSession(sessionID=request.COOKIES['padSessionID'])
         response.delete_cookie('sessionID', server.hostname)
         response.delete_cookie('padSessionID')
 
