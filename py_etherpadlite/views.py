@@ -38,7 +38,7 @@ def padCreate(request, pk):
                 group=group
             )
             pad.save()
-            return HttpResponseRedirect('/accounts/profile/')
+            return HttpResponseRedirect('/py_etherpadlite/accounts/profile/')
     else:  # No form to process so create a fresh one
         form = forms.PadCreate({'group': group.groupID})
 
@@ -65,10 +65,10 @@ def padDelete(request, pk):
     if request.method == 'POST':
         if 'confirm' in request.POST:
             pad.delete()
-        return HttpResponseRedirect('/accounts/profile/')
+        return HttpResponseRedirect('/py_etherpadlite/accounts/profile/')
 
     con = {
-        'action': '/etherpad/delete/' + pk + '/',
+        'action': '/py_etherpadlite/etherpad/delete/' + pk + '/',
         'question': _('Really delete this pad?'),
         'title': _('Deleting %(pad)s') % {'pad': pad.__str__()}
     }
@@ -95,7 +95,7 @@ def groupCreate(request):
             pad_group = PadGroup(group=group, server=server)
             pad_group.save()
             request.user.groups.add(group)
-            return HttpResponseRedirect('/accounts/profile/')
+            return HttpResponseRedirect('/py_etherpadlite/accounts/profile/')
         else:
             message = _("This Groupname is allready in use or invalid.")
     else:  # No form to process so create a fresh one
@@ -162,7 +162,7 @@ def pad(request, pk):
     # Initialize some needed values
     pad = get_object_or_404(Pad, pk=pk)
     padLink = pad.server.url + 'p/' + pad.group.groupID + '$' + \
-        urllib.quote_plus(pad.name)
+        urllib.parse.quote_plus(pad.name)
     server = urlparse(pad.server.url)
     author = PadAuthor.objects.get(user=request.user)
 
@@ -184,13 +184,13 @@ def pad(request, pk):
     expires = datetime.datetime.utcnow() + datetime.timedelta(
         seconds=config.SESSION_LENGTH
     )
-    epclient = EtherpadLiteClient(pad.server.apikey, pad.server.apiurl)
+    epclient = EtherpadLiteClient({'apikey':pad.server.apikey}, pad.server.apiurl)
 
     try:
         result = epclient.createSession(
-            pad.group.groupID,
-            author.authorID,
-            time.mktime(expires.timetuple()).__str__()
+            groupID=pad.group.groupID,
+            authorID=author.authorID,
+            validUntil=time.mktime(expires.timetuple()).__str__()
         )
     except Exception as e:
         response = render(

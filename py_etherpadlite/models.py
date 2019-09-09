@@ -161,7 +161,7 @@ class Pad(models.Model):
 			{'apikey':self.server.apikey}, self.server.apiurl)
 
     def Create(self):
-        return self.epclient.createGroupPad(self.group.groupID, self.name)
+        return self.epclient.createGroupPad(groupID=self.group.groupID, padName=self.name)
 
     def Destroy(self):
         return self.epclient.deletePad(self.padid)

@@ -6,7 +6,7 @@
 {% block content %}
   <h1>{{title}}</h1>
 
-  <form action="/etherpad/create/{{ pk }}/" method="post">
+  <form action="/py_etherpadlite/etherpad/create/{{ pk }}/" method="post">
     {% csrf_token %}
     <table>
       <tr>
