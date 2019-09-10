@@ -6,20 +6,20 @@ import string
 class Topic(models.Model):
     """Schema and methods for the topics provided to the user
     """
-    topic = models.CharField(max_field=64)
+    topic = models.CharField(max_length=64)
 
     class Meta:
         ordering = ('topic',)
-    
+
     def __str(self):
         return self.topic
 
 class Skill(models.Model):
     """Schema and methods for the skills under a topic 
     """
-    skill = models.CharField(max_field=64)
+    skill = models.CharField(max_length=64)
     topic = models.ManyToManyField(Topic)
-     
+
     class Meta:
         ordering = ('skill',)
     
@@ -29,7 +29,7 @@ class Skill(models.Model):
 class Concept(models.Model):
     """Schema and methods for the concepts under a topic
     """
-    concept = models.charField(max_field=256)
+    concept = models.CharField(max_length=256)
     skill = models.ForeignKey(Skill, on_delete=models.CASCADE)
    
     def __str__():
@@ -46,9 +46,9 @@ class Questions(models.Model):
         ('I', 'Intermediate'),
         ('A', 'Advanced'),
     )
-    level = models.CharField(max_field=1, choices=LEVELS)
+    level = models.CharField(max_length=1, choices=LEVELS)
     
-    concept = models.ForiegnKey(Concept, on_delete=models.CASCADE)
+    concept = models.ForeignKey(Concept, on_delete=models.CASCADE)
     skills = models.ManyToManyField(Skill)
     
     def __str__(self):

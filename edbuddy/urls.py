@@ -23,5 +23,6 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
     path('live_collaboration/', include('live_collaboration.urls')),
+    path('problems/', include('problems.urls')),
     path('py_etherpadlite/', include('py_etherpadlite.urls')),
 ]

@@ -31,15 +31,16 @@ ALLOWED_HOSTS = ['local.server.com']
 # Application definition
 
 INSTALLED_APPS = [
-    'py_etherpadlite.apps.PyEtherpadliteConfig',
-    'live_collaboration.apps.LiveCollaborationConfig',
-    'accounts.apps.AccountsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'accounts.apps.AccountsConfig',
+    'live_collaboration.apps.LiveCollaborationConfig',
+    'problems.apps.ProblemsConfig',
+    'py_etherpadlite.apps.PyEtherpadliteConfig',
 ]
 
 MIDDLEWARE = [
