@@ -6,34 +6,34 @@ import string
 class Topic(models.Model):
     """Schema and methods for the topics provided to the user
     """
-    topic = models.CharField(max_length=64)
+    name = models.CharField(max_length=64, primary_key=True)
 
     class Meta:
-        ordering = ('topic',)
+        ordering = ('name',)
 
     def __str(self):
-        return self.topic
+        return self.name
 
 class Skill(models.Model):
     """Schema and methods for the skills under a topic 
     """
-    skill = models.CharField(max_length=64)
-    topic = models.ManyToManyField(Topic)
+    name = models.CharField(max_length=64)
+    topics = models.ManyToManyField(Topic)
 
     class Meta:
-        ordering = ('skill',)
+        ordering = ('name',)
     
     def __str__(self):
-        return self.skill
+        return self.name
 
 class Concept(models.Model):
-    """Schema and methods for the concepts under a topic
+    """Schema and methods for the concepts under a skill
     """
-    concept = models.CharField(max_length=256)
+    name = models.CharField(max_length=256)
     skill = models.ForeignKey(Skill, on_delete=models.CASCADE)
    
-    def __str__():
-        return self.concept 
+    def __str__(self):
+        return self.name
     
 class Questions(models.Model):
     """Schema for the questions available
@@ -47,9 +47,7 @@ class Questions(models.Model):
         ('A', 'Advanced'),
     )
     level = models.CharField(max_length=1, choices=LEVELS)
-    
-    concept = models.ForeignKey(Concept, on_delete=models.CASCADE)
-    skills = models.ManyToManyField(Skill)
+    concepts = models.ManyToManyField(Concept)
     
     def __str__(self):
-        return title
+        return self.title
