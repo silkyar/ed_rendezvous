@@ -2,24 +2,37 @@
 
 
 {% block content %}
-    <h2>What would you like to work on today?</h2>
-    <ul class="menu">
-    {% for skill in skills %}
-        <li>{{ skill.name }}</li>
-        {% if skill.concept_set.all %}
-            <ul class="sub-menu">
-                {% for concept in skill.concept_set.all %}    
-                    <li>{{ concept.name}}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-    {% endfor %}
-    </ul>
+  <h2>What would you like to work on today?</h2>
+  <ul class="menu">
+  {% for skill in skills %}
+    <li><a href="#">{{ skill.name }}
+      {% if skill.concept_set.all %}
+         <ul class="sub-menu">
+           {% for concept in skill.concept_set.all %}
+              <input type="radio" name="sel_concept" id="sel_concept{{ forloop.counter }}" value="{{ concept.pk }}">
+              <label for="sel_concept{{ forloop.counter }}">{{ concept.name }}</label><br>
+           {% endfor %}
+         </ul>
+      {% endif %}
+    </li>
+  {% endfor %}
+  </ul>
+
+  <button id="submit"> Go!</button>
+
+  <script type="text/javascript">
+        $('.sub-menu').hide(); //Hide sub-menu default
+        $("a").click(function() {
+            $(this).children('.sub-menu').slideToggle('slow');
+        }).children('.sub-menu').click(function (event) {
+            event.stopPropagation()
+        });
+
+        $(document).ready( function() {
+            $("#submit").click( function(event) {
+                var radios = document.getElementsByName('sel_concept');
+                console.log(radios);
+            });
+        });
+  </script>
 {% endblock %}
-                                           
-<script type="text/javascript">
-    $('.sub-menu').hide();
-    $("li:has(ul)").click(function(){
-        $("ul",this).toggle('slow');
-    });
-</script>
