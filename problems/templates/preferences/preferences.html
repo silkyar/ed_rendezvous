@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+    <h2>What would you like to work on today?</h2>
+    <ul class="menu">
+    {% for skill in skills %}
+        <li>{{ skill.name }}</li>
+        {% if skill.concept_set.all %}
+            <ul class="sub-menu">
+                {% for concept in skill.concept_set.all %}    
+                    <li>{{ concept.name}}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endfor %}
+    </ul>
+{% endblock %}
+                                           
+<script type="text/javascript">
+    $('.sub-menu').hide();
+    $("li:has(ul)").click(function(){
+        $("ul",this).toggle('slow');
+    });
+</script>

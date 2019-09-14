@@ -4,5 +4,6 @@ from . import views
 
 
 urlpatterns = [
-    path('problems/main', views.index, name='main'),
+    path('', views.topics, name='topics'),
+    path('<str:topic_name>/', views.preferences, name='preferences'),
 ]

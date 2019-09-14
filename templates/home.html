@@ -1,8 +1,7 @@
 <!-- templates/home.html-->
 {% extends 'base.html' %}
 
-{% block title %}Home{% endblock %}
-
+{% block title %}EdRendezvous{% endblock %}
 {% block content %}
 {% if user.is_authenticated %}
   Hi {{ user.username }}!
@@ -10,5 +9,17 @@
 {% else %}
   <p>You are not logged in</p>
   <a href="{% url 'login' %}">login</a>
+{% endif %}
+
+{% if topics %}
+    <p> Students learn faster by working together through problems. </p>
+    <p> Ed Rendezvous would match you to a peer based on your topics of interest and skills </p>
+    <ul>
+    {% for topic in topics %}
+        <li><a href="/problems/{{ topic.name }}/">{{ topic.name }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No topics available.</p>
 {% endif %}
 {% endblock %}`
