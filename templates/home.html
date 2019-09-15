@@ -16,7 +16,7 @@
     <p> Ed Rendezvous would match you to a peer based on your topics of interest and skills </p>
     <ul>
     {% for topic in topics %}
-        <li><a href="/problems/{{ topic.name }}/">{{ topic.name }}</a></li>
+        <li><a href="/problems/show_preferences/{{ topic.name }}/">{{ topic.name }}</a></li>
     {% endfor %}
     </ul>
 {% else %}

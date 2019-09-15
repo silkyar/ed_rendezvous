@@ -7,7 +7,6 @@ from problems.models import *
 def index(request):
     return HttpResponse("Hello, leaner. You're at the problems index.")
 
-
 def topics(request):
     topics = Topic.objects.all()
     context = {
@@ -26,5 +25,6 @@ def preferences(request, topic_name):
     return render(request, 'preferences/preferences.html', context)
 
 def process_preferences(request):
-    preference = request.POST('concept_radiobtn')
+    preference = request.POST.get('concept_radiobtn')
     print(preference)
+    return HttpResponse("We are matching you with a peer now")
