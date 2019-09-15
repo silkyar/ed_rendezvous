@@ -2,6 +2,8 @@
 
 
 {% block content %}
+<form id="form" method="post" action="/problems/process_preferences/">
+  {% csrf_token %}
   <h2>What would you like to work on today?</h2>
   <ul class="menu">
   {% for skill in skills %}
@@ -9,8 +11,8 @@
       {% if skill.concept_set.all %}
          <ul class="sub-menu">
            {% for concept in skill.concept_set.all %}
-              <input type="radio" name="sel_concept" id="sel_concept{{ forloop.counter }}" value="{{ concept.pk }}">
-              <label for="sel_concept{{ forloop.counter }}">{{ concept.name }}</label><br>
+              <input type="radio" name="concept_radiobtn" id="concept_radiobtn{{ forloop.counter }}" value="{{ concept.pk }}">
+              <label for="concept_radiobtn{{ forloop.counter }}">{{ concept.name }}</label><br>
            {% endfor %}
          </ul>
       {% endif %}
@@ -18,7 +20,7 @@
   {% endfor %}
   </ul>
 
-  <button id="submit"> Go!</button>
+  <button id="radiobtn_submit"> Go!</button>
 
   <script type="text/javascript">
         $('.sub-menu').hide(); //Hide sub-menu default
@@ -29,9 +31,8 @@
         });
 
         $(document).ready( function() {
-            $("#submit").click( function(event) {
-                var radios = document.getElementsByName('sel_concept');
-                console.log(radios);
+            $("#radiobtn_submit").click( function(event) {
+                document.getElementById('form').submit();
             });
         });
   </script>

@@ -24,3 +24,7 @@ def preferences(request, topic_name):
         'skills': skills
     }
     return render(request, 'preferences/preferences.html', context)
+
+def process_preferences(request):
+    preference = request.POST('concept_radiobtn')
+    print(preference)
