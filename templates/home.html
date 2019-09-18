@@ -3,14 +3,6 @@
 
 {% block title %}EdRendezvous{% endblock %}
 {% block content %}
-{% if user.is_authenticated %}
-  Hi {{ user.username }}!
-  <p><a href="{% url 'logout' %}">logout</a></p>
-{% else %}
-  <p>You are not logged in</p>
-  <a href="{% url 'login' %}">login</a>
-{% endif %}
-
 {% if topics %}
     <p> Students learn faster by working together through problems. </p>
     <p> Ed Rendezvous would match you to a peer based on your topics of interest and skills </p>
