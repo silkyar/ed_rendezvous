@@ -39,7 +39,7 @@ def process_preferences(request):
         for user_session in user_sessions:
             concept = Concept.objects.get(
                     pk=concept_preference_key)
-            obj, created =
+            obj, created = \
                 UserPreference.objects.update_or_create(
                     user_session=user_session,
                     defaults={'concept': concept
