@@ -53,7 +53,9 @@ def process_preferences(request):
                 defaults={'state':DEFAULT_USER_STATE},
             )
 
-        return HttpResponse("We are matching you with a peer now")
+        return render(
+                request, 'base.html',
+                {'message': "We are matching you with a peer now"})
 
     return render(
                 request, 'base.html',

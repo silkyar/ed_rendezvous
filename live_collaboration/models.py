@@ -5,6 +5,7 @@ from django.contrib.auth.models import User, Group
 from django.contrib.auth.signals import user_logged_in
 
 from problems.models import Concept
+from py_etherpadlite.models import *
 
 DEFAULT_USER_STATE = 'W'
 
