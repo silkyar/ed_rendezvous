@@ -25,6 +25,28 @@ def preferences(request, topic_name):
     return render(request, 'preferences/preferences.html', context)
 
 def process_preferences(request):
-    preference = request.POST.get('concept_radiobtn')
-    print(preference)
-    return HttpResponse("We are matching you with a peer now")
+    concept_preference = request.POST.get('concept_radiobtn')
+
+    # Get the sessions associated with this user
+    if request.user.is_authenticated:
+        user = request.user
+        user_sessions = UserSession.objects.get(user=user)
+
+        # Insert/update user preferences with the current preferences
+        # TODO: Change form to take in level preference too
+        for user_session in user_sessions:
+            obj, created = UserPreference.objects.update_or_create(
+                user_session=user_session,
+                defaults={'concept': concept_preference
+                         ,'level':'B'
+                         },
+            )
+            # Insert/update user state. The default state is waiting
+            UserState.objects.update_or_create(
+                user_preference = obj,
+                defaults={state:'W'},
+            )
+        return HttpResponse("We are matching you with a peer now")
+    return render(
+                request, 'base.html',
+                {'message': "Log-in to be matched with a peer for collaboration"})
