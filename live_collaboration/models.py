@@ -6,6 +6,7 @@ from django.contrib.auth.signals import user_logged_in
 
 from problems.models import Concept
 
+DEFAULT_USER_STATE = 'W'
 
 class UserSession(models.Model):
     """Model to keep track of online users via their session info
@@ -48,7 +49,7 @@ class UserState(models.Model):
         ('W', 'Waiting'),
         ('C', 'Collaborating'),
     )
-    state = models.CharField(max_length=1, choices=STATE, default='W')
+    state = models.CharField(max_length=1, choices=STATE, default=DEFAULT_USER_STATE)
 
 # Register signal handles
 user_logged_in.connect(UserSession.user_logged_in_handler)
