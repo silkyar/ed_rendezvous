@@ -23,9 +23,13 @@ def user_preferences_updated(sender, instance, *args, **kwargs):
 
         # Create a new pad for the user and the peer
         pad = Pad(name=get_pad_name(), server=pad_group.server, group=pad_group)
+        print(pad)
 
         # Mark user and peer in collaborating state
         UserState.objects.filter(user_preference=instance).update(state='C')
+
+    # We don't need to wait here if there are no peers to match with.
+    # When another user triggers this signal, this user might get that user as a peer
 
 def create_or_get_pad_group(user_a, user_b):
     # One group per unique pair of peers
