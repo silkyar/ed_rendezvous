@@ -108,8 +108,8 @@ def groupCreate(request):
     con.update(csrf(request))
     return render(
 		request,
-        'etherpad-lite/groupCreate.html',
-        con
+                'etherpad-lite/groupCreate.html',
+                con
     )
 
 

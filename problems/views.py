@@ -1,7 +1,8 @@
+from django.db import IntegrityError, OperationalError
 from django.db.models import Q
-from django.http import HttpResponse
-from django.shortcuts import render
+from django.http import HttpResponse, HttpResponseRedirect
 
+from django.shortcuts import render
 from problems.models import *
 from live_collaboration.models import *
 
@@ -34,29 +35,30 @@ def process_preferences(request):
         user = request.user
         user_sessions = UserSession.objects.filter(user=user)
 
+        print("I am in process preferences")
         # Insert/update user preferences with the current preferences
         # TODO: Change form to take in level preference too
         for user_session in user_sessions:
+            print(concept_preference_key)
             concept = Concept.objects.get(
                     pk=concept_preference_key)
-            obj, created = \
-                UserPreference.objects.update_or_create(
-                    user_session=user_session,
-                    defaults={'concept': concept
-                             ,'level':'B'
-                             },
+            try:
+                obj, created = \
+                    UserPreference.objects.update_or_create(
+                        user_session=user_session,
+                        defaults={'concept': concept
+                                 ,'level':'B'
+                                 },
+                    )
+
+                # Insert/update user state. The default state is waiting
+                UserState.objects.update_or_create(
+                    user_preference = obj,
+                    defaults={'state':DEFAULT_USER_STATE},
                 )
+                return HttpResponseRedirect('/live_collaboration/matching')
+            # TODO: Need to figure out why we get 2 requests
+            except OperationalError as e:
+                return HttpResponseRedirect('/live_collaboration/matching')
 
-            # Insert/update user state. The default state is waiting
-            UserState.objects.update_or_create(
-                user_preference = obj,
-                defaults={'state':DEFAULT_USER_STATE},
-            )
-
-        return render(
-                request, 'base.html',
-                {'message': "We are matching you with a peer now"})
-
-    return render(
-                request, 'base.html',
-                {'message': "Log-in to be matched with a peer for collaboration"})
+    return HttpResponseRedirect('accounts/login')
