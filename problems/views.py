@@ -39,7 +39,6 @@ def process_preferences(request):
         # Insert/update user preferences with the current preferences
         # TODO: Change form to take in level preference too
         for user_session in user_sessions:
-            print(concept_preference_key)
             concept = Concept.objects.get(
                     pk=concept_preference_key)
             try:

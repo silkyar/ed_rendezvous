@@ -4,6 +4,8 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from live_collaboration.models import *
 from py_etherpadlite.models import *
+from problems.models import *
+from etherpad_lite import EtherpadLiteClient
 
 import random
 
@@ -36,19 +38,23 @@ def create_or_get_pad_group(user_a, user_b):
     if not PadGroup.objects.filter(group=group).exists():
         pad_group = PadGroup(group=group, server=server)
         pad_group.save()
+    else:
+        pad_group = PadGroup.objects.get(group=group, server=server)
 
     # PadAuthors creation
+    # Adding PadAuthors to PadGroup is done automatically during
+    # PadAuthor creation as long as the user corresponding to
+    # PadAuthor is in group corresponding to PadGroup
     if not PadAuthor.objects.filter(user=user_a).exists():
         author_a = PadAuthor(user=user_a, server=server)
         author_a.save()
+    author_a.GroupSynch()
 
     if not PadAuthor.objects.filter(user=user_b).exists():
         author_b = PadAuthor(user=user_b, server=server)
         author_b.save()
+    author_a.GroupSync()
 
-    # Adding PadAuthors to PadGroup is done automatically during
-    # PadAuthor creation as long as the user corresponding to
-    # PadAuthor is in group corresponding to PadGroup
     return pad_group
 
 def random_match(user_preference):
@@ -101,9 +107,30 @@ def user_preferences_updated(sender, instance, *args, **kwargs):
         pad = Pad(name=get_pad_name(), server=pad_group.server, group=pad_group)
         pad.save()
 
-        # Mark user and peer in collaborating state
+        # Write a question to the pad
+        question = None
+        concept = user_preference.concept
+        questions = Questions.objects.filter(Q(concepts__name__icontains=concept.name))
+        if questions:
+            question_index = random.randint(0, questions.count() - 1)
+            question = questions[question_index]
+        else:
+            raise Exception(
+            "No questions found in the database for concept {}".format(
+                concept.name))
+
+        if question:
+            epclient = EtherpadLiteClient({'apikey':pad.server.apikey}, pad.server.apiurl)
+            epclient.setText(padID=pad.padid, text=question.description)
+
+         # Mark user and peer in collaborating state
         UserState.objects.filter(user_preference=user_preference).update(state='C')
         UserState.objects.filter(user_preference=peer_preference).update(state='C')
+
+        # Save the pad the users will be using
+        UserState.objects.filter(user_preference=user_preference).update(pad=pad)
+        UserState.objects.filter(user_preference=peer_preference).update(pad=pad)
+
 
     # We don't need to wait here if there are no peers to match with.
     # When another user triggers this signal, this user might get that user as a peer

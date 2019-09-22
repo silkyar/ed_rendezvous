@@ -163,14 +163,14 @@ class Pad(models.Model):
         return self.epclient.createGroupPad(groupID=self.group.groupID, padName=self.name)
 
     def Destroy(self):
-        return self.epclient.deletePad(self.padid)
+        return self.epclient.deletePad(padID=self.padid)
 
     def isPublic(self):
-        result = self.epclient.getPublicStatus(self.padid)
+        result = self.epclient.getPublicStatus(padID=self.padid)
         return result['publicStatus']
 
     def ReadOnly(self):
-        return self.epclient.getReadOnlyID(self.padid)
+        return self.epclient.getReadOnlyID(padID=self.padid)
 
     def save(self, *args, **kwargs):
         self.Create()

@@ -3,4 +3,26 @@
 
 {% block content %}
   <p>Matching with a peer now </p>
+
+  <script type="text/javascript">
+    (function worker() {
+    $.ajax({
+      url: '/live_collaboration/ajax/matching_poll.html',
+      dataType: 'json',
+      success: function(data) {
+          if (data.pad) {
+            console.log(data.url)
+            debugger
+            window.location(data.url) 
+          }
+      },
+      complete: function() {
+        // Schedule the next request when the current one's complete
+        console.log("In complete")
+        debugger
+        setTimeout(worker, 5000);
+      }
+    });
+    })();
+  </script>
 {% endblock %}

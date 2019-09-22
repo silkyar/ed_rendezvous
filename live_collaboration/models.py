@@ -51,6 +51,8 @@ class UserState(models.Model):
         ('C', 'Collaborating'),
     )
     state = models.CharField(max_length=1, choices=STATE, default=DEFAULT_USER_STATE)
+    # We needn't delete user state if the pad they are working on gets deteted
+    pad = models.ForeignKey(Pad, models.SET_NULL, default=None, null=True, blank=True)
 
 # Register signal handles
 user_logged_in.connect(UserSession.user_logged_in_handler)
