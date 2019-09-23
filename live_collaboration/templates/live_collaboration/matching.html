@@ -7,13 +7,14 @@
   <script type="text/javascript">
     (function worker() {
     $.ajax({
-      url: '/live_collaboration/ajax/matching_poll.html',
+      url: '/live_collaboration/ajax/matching_poll',
       dataType: 'json',
       success: function(data) {
-          if (data.pad) {
+          console.log("In success")
+          debugger
+          if (data.status == 1) {
             console.log(data.url)
-            debugger
-            window.location(data.url) 
+            window.location.href = data.url;
           }
       },
       complete: function() {
